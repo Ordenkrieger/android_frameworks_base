@@ -54,6 +54,7 @@ import android.os.SystemProperties;
 import android.os.Trace;
 import android.os.UserHandle;
 import android.os.WorkSource;
+import android.pocket.PocketManager;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.provider.Settings.SettingNotFoundException;
@@ -1516,6 +1517,36 @@ public final class PowerManagerService extends SystemService
             }
             mWakefulnessChanging = false;
             mNotifier.onWakefulnessChangeFinished();
+        }
+    }
+
+    private void updateButtonBrightnessIfNeededLocked(long now) {
+        if (mButtonsLight != null) {
+            final int oldBrightness = mButtonsLight.getBrightness();
+            final boolean wasOn = mButtonsLight.getBrightness() > 0;
+            final boolean awake = mWakefulness == WAKEFULNESS_AWAKE;
+            final boolean turnOffByTimeout = now >= mLastUserActivityTime + BUTTON_ON_DURATION;
+            final boolean screenBright = (mUserActivitySummary & USER_ACTIVITY_SCREEN_BRIGHT) != 0;
+            final PocketManager pocketManager = (PocketManager) mContext.getSystemService(Context.POCKET_SERVICE);
+            final boolean isDeviceInPocket = pocketManager != null && pocketManager.isDeviceInPocket();
+            if (awake && wasOn) {
+                if (turnOffByTimeout || !screenBright || !mButtonBrightnessEnabled) {
+                    mButtonsLight.setBrightness(0);
+                } else if (oldBrightness != mButtonBrightnessSetting) {
+                    mButtonsLight.setBrightness(mButtonBrightnessSetting);
+                }
+            } else if (awake && !wasOn) {
+                if (mButtonBrightnessEnabled && !isDeviceInPocket
+                        && (mWakefulnessChanging || screenBright) && !turnOffByTimeout) {
+                    mButtonsLight.setBrightness(mButtonBrightnessSetting);
+                }
+            } else if (!awake && wasOn) {
+                mButtonsLight.setBrightness(0);
+            } else if (!screenBright && wasOn) {
+                if (mButtonBrightnessEnabled) {
+                    mButtonsLight.setBrightness(0);
+                }
+            }
         }
     }
 
