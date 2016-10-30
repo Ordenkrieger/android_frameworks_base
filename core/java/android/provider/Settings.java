@@ -3785,12 +3785,6 @@ public final class Settings {
          */
         public static final String SHOW_SU_INDICATOR = "show_su_indicator";
 
-         /**
-         * Enable double tap gesture anywhere on the lock screen put device to sleep
-         * @hide
-         */
-        public static final String DOUBLE_TAP_SLEEP_ANYWHERE = "double_tap_sleep_anywhere";
-
  	   /**
          * Three Finger Gesture from Oppo
          *
