@@ -6691,11 +6691,16 @@ public final class Settings {
                 = "demo_user_setup_complete";
 
         /**
-         * Specifies whether the web action API is enabled.
-         *
+         * Whether to display the ADB notification.
          * @hide
          */
-        public static final String WEB_ACTION_ENABLED = "web_action_enabled";
+        public static final String ADB_NOTIFY = "adb_notify";
+
+        /**
+         * Whether to use one tap tile action to enable or disable data 
+         * @hide
+         */
+        public static final String QS_DATA_ADVANCED = "qs_data_advanced";
 
         /**
          * Whether to include options in power menu for rebooting into recovery or bootloader
