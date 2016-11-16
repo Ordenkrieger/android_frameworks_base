@@ -397,6 +397,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     View mExpandedContents;
     TextView mNotificationPanelDebugText;
 
+    private int mQsLayoutColumns;
+    
     // settings
     private QSPanel mQSPanel;
 
@@ -508,7 +510,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_COLUMNS_LANDSCAPE),
                     false, this, UserHandle.USER_ALL);
-            update();
+           resolver.registerContentObserver(Settings.Secure.getUriFor(
+                  Settings.Secure.LOCK_QS_DISABLED),
+                  false, this, UserHandle.USER_ALL);
+           resolver.registerContentObserver(Settings.System.getUriFor(
+                  Settings.System.QS_LAYOUT_COLUMNS),
+                  false, this, UserHandle.USER_ALL);
+		    update();
         }
 
 
@@ -528,12 +536,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.QS_ROWS_PORTRAIT))
                     || uri.equals(Settings.System.getUriFor(
                     Settings.System.QS_COLUMNS_PORTRAIT))) {
-                	updateQSRowsColumnsPortrait();
+                	updateResources();
            } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.QS_ROWS_LANDSCAPE))
                     || uri.equals(Settings.System.getUriFor(
                     Settings.System.QS_COLUMNS_LANDSCAPE))) {
-                	updateQSRowsColumnsLandscape();
+                	updateResources();
            } 
 
 		update();
@@ -541,6 +549,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         @Override
         public void update() {
+
+            ContentResolver resolver = mContext.getContentResolver();
+
+            mQsLayoutColumns = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_LAYOUT_COLUMNS, 3, mCurrentUserId);
+
+            if (mHeader != null) {
+                mHeader.updateSettings();
+            }
         }
     }    
 
