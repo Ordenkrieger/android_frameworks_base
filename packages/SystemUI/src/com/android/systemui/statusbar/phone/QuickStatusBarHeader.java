@@ -383,7 +383,9 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         Intent intent = null;
         if (alarm != null) {
             PendingIntent showIntent = alarm.getShowIntent();
-            mActivityStarter.startPendingIntentDismissingKeyguard(showIntent);
+            if (showIntent != null && showIntent.isActivity()) {
+                intent = showIntent.getIntent();
+            }
         }
         if (intent == null) {
             intent = new Intent(AlarmClock.ACTION_SHOW_ALARMS);
@@ -397,6 +399,14 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         ContentUris.appendId(builder, System.currentTimeMillis());
         Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
         mActivityStarter.startActivity(intent, true /* dismissShade */);
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        if (v == mSettingsButton) {
+            startRRActivity();
+        }
+        return false;
     }
 
     private void startSettingsActivity() {
