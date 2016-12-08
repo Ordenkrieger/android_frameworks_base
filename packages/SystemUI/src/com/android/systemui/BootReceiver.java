@@ -33,12 +33,7 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
         try {
-            // Start the load average overlay, if activated
             ContentResolver res = context.getContentResolver();
-            if (Settings.Global.getInt(res, Settings.Global.SHOW_PROCESSES, 0) != 0) {
-                Intent loadavg = new Intent(context, com.android.systemui.LoadAverageService.class);
-                context.startService(loadavg);
-            }
             // Start the cpu info overlay, if activated
             if (Settings.Global.getInt(res, Settings.Global.SHOW_CPU, 0) != 0) {
                 Intent cpuinfo = new Intent(context, com.android.systemui.CPUInfoService.class);
