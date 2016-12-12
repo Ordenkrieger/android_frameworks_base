@@ -31,6 +31,7 @@ import android.provider.CalendarContract;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,8 +56,7 @@ import com.android.systemui.statusbar.policy.WeatherController;
 import com.android.systemui.tuner.TunerService;
 
 public class QuickStatusBarHeader extends BaseStatusBarHeader implements
-        NextAlarmChangeCallback, OnClickListener, OnUserInfoChangedListener {
-
+    NextAlarmChangeCallback, OnClickListener, OnLongClickListener, OnUserInfoChangedListener {
     private static final String TAG = "QuickStatusBarHeader";
 
     private static final float EXPAND_INDICATOR_THRESHOLD = .93f;
@@ -134,6 +134,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mSettingsButton = (SettingsButton) findViewById(R.id.settings_button);
         mSettingsContainer = findViewById(R.id.settings_button_container);
         mSettingsButton.setOnClickListener(this);
+        mSettingsButton.setOnLongClickListener(this);
 
         mAlarmStatusCollapsed = findViewById(R.id.alarm_status_collapsed);
         mAlarmStatusCollapsed.setOnClickListener(this);
@@ -399,6 +400,14 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mActivityStarter.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS),
                 true /* dismissShade */);
     }
+
+    private void startRRActivity() {
+        Intent duIntent = new Intent(Intent.ACTION_MAIN);
+        duIntent.setClassName("com.android.settings",
+            "com.android.settings.Settings$MainSettingsLayoutActivity");
+        mActivityStarter.startActivity(duIntent, true /* dismissShade */);
+    }
+
 
     @Override
     public void setNextAlarmController(NextAlarmController nextAlarmController) {
