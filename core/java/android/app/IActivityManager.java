@@ -266,7 +266,6 @@ public interface IActivityManager extends IInterface {
 
     public Configuration getConfiguration() throws RemoteException;
     public void updateConfiguration(Configuration values) throws RemoteException;
-    public void updateAssets(int userId, List<String> packageNames) throws RemoteException;
     public void setRequestedOrientation(IBinder token,
             int requestedOrientation) throws RemoteException;
     public int getRequestedOrientation(IBinder token) throws RemoteException;
@@ -1075,6 +1074,5 @@ public interface IActivityManager extends IInterface {
     int SET_VR_THREAD_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION + 377;
     int SET_RENDER_THREAD_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION + 378;
     int SET_HAS_TOP_UI = IBinder.FIRST_CALL_TRANSACTION + 379;
-    int UPDATE_ASSETS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION + 380;
-    int CAN_BYPASS_WORK_CHALLENGE = IBinder.FIRST_CALL_TRANSACTION + 381;
+    int CAN_BYPASS_WORK_CHALLENGE = IBinder.FIRST_CALL_TRANSACTION + 380;
 }
