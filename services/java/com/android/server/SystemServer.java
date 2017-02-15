@@ -34,6 +34,7 @@ import android.os.Environment;
 import android.os.FactoryTest;
 import android.os.FileUtils;
 import android.os.IBinder;
+import android.os.IPowerManager;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.os.RemoteException;
@@ -85,7 +86,6 @@ import com.android.server.net.NetworkPolicyManagerService;
 import com.android.server.net.NetworkStatsService;
 import com.android.server.notification.NotificationManagerService;
 import com.android.server.os.RegionalizationService;
-import com.android.server.om.OverlayManagerService;
 import com.android.server.os.SchedulingPolicyService;
 import com.android.server.pm.BackgroundDexOptService;
 import com.android.server.pm.Installer;
@@ -530,9 +530,6 @@ public final class SystemServer {
 
         // Set up the Application instance for the system process and get started.
         mActivityManagerService.setSystemProcess();
-
-        // Manages Overlay packages
-        mSystemServiceManager.startService(new OverlayManagerService(mSystemContext, installer));
 
         // The sensor service needs access to package manager service, app ops
         // service, and permissions service, therefore we start it after them.
@@ -1261,6 +1258,7 @@ public final class SystemServer {
         }
 
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH)) {
+            //#Fixme:mSystemServiceManager.startService(WEAR_BLUETOOTH_SERVICE_CLASS);
             mSystemServiceManager.startService(WEAR_BLUETOOTH_SERVICE_CLASS);
             mSystemServiceManager.startService(WEAR_WIFI_MEDIATOR_SERVICE_CLASS);
           if (!disableNonCoreServices) {

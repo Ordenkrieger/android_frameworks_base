@@ -18,9 +18,6 @@ package com.android.systemui.statusbar;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.ChaosLab;
-import android.annotation.ChaosLab.Classification;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.StackId;
 import android.app.ActivityManagerNative;
@@ -45,7 +42,6 @@ import android.content.pm.UserInfo;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.graphics.Rect;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.media.session.MediaController;
@@ -76,14 +72,12 @@ import android.util.Slog;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.IWindowManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
@@ -97,7 +91,6 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.MetricsProto.MetricsEvent;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.StatusBarIcon;
-import com.android.internal.util.omni.OmniSwitchConstants;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardHostView.OnDismissAction;
 import com.android.keyguard.KeyguardUpdateMonitor;
@@ -119,8 +112,7 @@ import com.android.systemui.statusbar.policy.PreviewInflater;
 import com.android.systemui.statusbar.policy.RemoteInputView;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
-import com.android.systemui.chaos.lab.gestureanywhere.GestureAnywhereView;
- 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -259,9 +251,6 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected RecentsComponent mRecents;
 
     protected int mZenMode;
-
-    @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_FIELD)
-    protected GestureAnywhereView mGestureAnywhereView;
 
     // which notification is currently being longpress-examined by the user
     private NotificationGuts mNotificationGutsExposed;
@@ -1393,49 +1382,27 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     /** Proxy for RecentsComponent */
 
-    private boolean isOmniSwitchEnabled() {
-        int settingsValue = Settings.System.getIntForUser(
-                mContext.getContentResolver(), Settings.System.RECENTS_USE_OMNISWITCH, 0
-                , UserHandle.USER_CURRENT);
-        return (settingsValue == 1);
-    }
-
     protected void showRecents(boolean triggeredFromAltTab, boolean fromHome) {
-        if (isOmniSwitchEnabled()) {
-            Intent showIntent = new Intent(OmniSwitchConstants.ACTION_SHOW_OVERLAY);
-            mContext.sendBroadcastAsUser(showIntent, UserHandle.CURRENT);
-        } else {
-            if (mRecents != null) {
-                sendCloseSystemWindows(SYSTEM_DIALOG_REASON_RECENT_APPS);
-                mRecents.showRecents(triggeredFromAltTab, fromHome);
-            }
+        if (mRecents != null) {
+            sendCloseSystemWindows(SYSTEM_DIALOG_REASON_RECENT_APPS);
+            mRecents.showRecents(triggeredFromAltTab, fromHome);
         }
     }
 
     protected void hideRecents(boolean triggeredFromAltTab, boolean triggeredFromHomeKey) {
-        if (isOmniSwitchEnabled()) {
-            Intent showIntent = new Intent(OmniSwitchConstants.ACTION_HIDE_OVERLAY);
-            mContext.sendBroadcastAsUser(showIntent, UserHandle.CURRENT);
-        } else if (mRecents != null) {
+        if (mRecents != null) {
             mRecents.hideRecents(triggeredFromAltTab, triggeredFromHomeKey);
         }
     }
 
     protected void toggleRecents() {
-        if (isOmniSwitchEnabled()) {
-            Intent showIntent = new Intent(OmniSwitchConstants.ACTION_TOGGLE_OVERLAY);
-            mContext.sendBroadcastAsUser(showIntent, UserHandle.CURRENT);
-        } else if (mRecents != null) {
+        if (mRecents != null) {
             mRecents.toggleRecents(mDisplay);
         }
     }
 
     protected void preloadRecents() {
-        if (!isOmniSwitchEnabled()) {
-            if (mRecents != null) {
-                mRecents.showNextAffiliatedTask();
-            }
-        } else if (mRecents != null) {
+        if (mRecents != null) {
             mRecents.preloadRecents();
         }
     }
@@ -1449,28 +1416,20 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected void cancelPreloadingRecents() {
-        if (!isOmniSwitchEnabled()) {
-            if (mRecents != null) {
-                mRecents.showNextAffiliatedTask();
-            }
-        } else if (mRecents != null) {
+        if (mRecents != null) {
             mRecents.cancelPreloadingRecents();
         }
     }
 
     protected void showRecentsNextAffiliatedTask() {
-        if (!isOmniSwitchEnabled()) {
-            if (mRecents != null) {
-                mRecents.showNextAffiliatedTask();
-            }
+        if (mRecents != null) {
+            mRecents.showNextAffiliatedTask();
         }
     }
 
     protected void showRecentsPreviousAffiliatedTask() {
-        if (!isOmniSwitchEnabled()) {
-            if (mRecents != null) {
-                mRecents.showPrevAffiliatedTask();
-            }
+        if (mRecents != null) {
+            mRecents.showPrevAffiliatedTask();
         }
     }
 
@@ -2734,39 +2693,5 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (mAssistManager != null) {
             mAssistManager.startAssist(args);
         }
-    }
-
-    @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_METHOD)
-    protected void addGestureAnywhereView() {
-        mGestureAnywhereView = (GestureAnywhereView)View.inflate(
-                mContext, R.layout.gesture_anywhere_overlay, null);
-        mWindowManager.addView(mGestureAnywhereView, getGestureAnywhereViewLayoutParams(Gravity.LEFT));
-        mGestureAnywhereView.setStatusBar(this);
-    }
-
-    @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_METHOD)
-    protected void removeGestureAnywhereView() {
-        if (mGestureAnywhereView != null)
-            mWindowManager.removeView(mGestureAnywhereView);
-   }
-
-    @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_METHOD)
-    protected WindowManager.LayoutParams getGestureAnywhereViewLayoutParams(int gravity) {
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_STATUS_BAR_SUB_PANEL,
-                0
-                | WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING
-                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
-                PixelFormat.TRANSLUCENT);
-        lp.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_NO_MOVE_ANIMATION;
-        lp.gravity = Gravity.TOP | gravity;
-        lp.setTitle("GestureAnywhereView");
-
-        return lp;
     }
 }

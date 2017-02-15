@@ -17,8 +17,6 @@
 package android.provider;
 
 import android.annotation.NonNull;
-import android.annotation.ChaosLab;
-import android.annotation.ChaosLab.Classification;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.annotation.SystemApi;
@@ -3328,13 +3326,6 @@ public final class Settings {
         public static final Validator ACCELEROMETER_ROTATION_VALIDATOR = sBooleanValidator;
 
         /**
-         * Whether to enable status and navigation bar color in battery saver mode.
-         *
-         * @hide
-         */
-        public static final String BATTERY_SAVER_MODE_COLOR = "battery_save_mode_color";
-
-        /**
          * Default screen rotation when no other policy applies.
          * When {@link #ACCELEROMETER_ROTATION} is zero and no on-screen Activity expresses a
          * preference, this rotation value will be used. Must be one of the
@@ -3695,6 +3686,12 @@ public final class Settings {
          */
 
         /**
+         * Boolean value on whether to show weather in the statusbar
+         * @hide
+         */
+        public static final String STATUS_BAR_SHOW_WEATHER = "status_bar_show_weather";
+
+        /**
           * Volume keys control cursor in text fields (default is 0)
           * 0 - Disabled
           * 1 - Volume up/down moves cursor left/right
@@ -3702,197 +3699,6 @@ public final class Settings {
           * @hide
           */
          public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
-
-       /**
-         * Network traffic indicator, goes from least to greatest significant bitwise
-         * 0 = Display up-stream traffic if set
-         * 1 = Display down-stream traffic if set
-         * 2 = Show as Byte/s if set
-         * 16-31 = Refresh interval(ms) min: 250 max: 32750 default: 1000
-         * @hide
-        */
-        public static final String NETWORK_TRAFFIC_STATE = "network_traffic_state";
-
-       /**
-         * Whether or not to hide the network traffic indicator when there is no activity
-         * @hide
-         */
-        public static final String NETWORK_TRAFFIC_AUTOHIDE = "network_traffic_autohide";
-
-        /**
-         * Network traffic inactivity threshold (default is 10 kBs)
-         * @hide
-         */
-        public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
-
-        /**
-         * Network stats Color style
-         * @hide
-         */
-        public static final String NETWORK_TRAFFIC_COLOR = "network_traffic_color";
-
-        /**
-         * Position of date
-         * 0 - Left of clock
-         * 1 - Right of clock
-         * @hide
-         */
-        public static final String STATUSBAR_CLOCK_DATE_POSITION = "statusbar_clock_date_position";
-
- 
-        /**
-         * Whether to use gesture anywhere feature.
-         * @hide
-         */
-        @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_FIELD)
-        public static final String GESTURE_ANYWHERE_ENABLED = "gesture_anywhere_enabled";
-
-        /**
-         * Position of gesture anywhere trigger.  Value is either Gravity.LEFT or Gravity.RIGHT
-         * @hide
-         */
-        @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_FIELD)
-        public static final String GESTURE_ANYWHERE_POSITION = "gesture_anywhere_position";
-        /**
-         * Last time gestures were altered.
-         * Used to determine if gestures should be reloaded by the view.
-         * @hide
-         */
-        @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_FIELD)
-        public static final String GESTURE_ANYWHERE_CHANGED = "gesture_anywhere_changed";
-
-        /**
-         * Width of the gesture anywhere trigger.
-         * @hide
-         */
-        @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_FIELD)
-        public static final String GESTURE_ANYWHERE_TRIGGER_WIDTH = "gesture_anywhere_trigger_width";
-
-        /**
-         * Position of gesture anywhere trigger.
-         * @hide
-         */
-        @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_FIELD)
-        public static final String GESTURE_ANYWHERE_TRIGGER_TOP = "gesture_anywhere_trigger_top";
-
-        /**
-         * Height of the gesture anywhere trigger.
-         * @hide
-         */
-        @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_FIELD)
-        public static final String GESTURE_ANYWHERE_TRIGGER_HEIGHT = "gesture_anywhere_trigger_height";
-
-        /**
-         * Whether to display the gesture anywhere trigger region or not.
-         * Used internally for showing the trigger in settings so user can see its placement
-         * @hide
-         */
-        @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_FIELD)
-        public static final String GESTURE_ANYWHERE_SHOW_TRIGGER = "gesture_anywhere_show_trigger";
-
-        /**
-         * @hide
-         */
-        public static final String SHOW_SU_INDICATOR = "show_su_indicator";
-
- 	   /**
-         * Three Finger Gesture from Oppo
-         *
-         * @hide
-         */
-        public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
-
-	/*
-         * Settings for clock font style
-         * @hide
-         */
-        public static final String STATUSBAR_CLOCK_FONT_STYLE = "statusbar_clock_font_style";
-
-	/**
-         * Settings for clock font size
-         * @hide
-         */
-        public static final String STATUSBAR_CLOCK_FONT_SIZE = "statusbar_clock_font_size";
-
-         /**
-         * Shows custom date before clock time
-         * 0 - No Date
-         * 1 - Small Date
-         * 2 - Normal Date
-         * @hide
-         */
-        public static final String STATUS_BAR_DATE = "status_bar_date";
-
-        /**
-         * Sets the date string style
-         * 0 - Regular style
-         * 1 - Lowercase
-         * 2 - Uppercase
-         * @hide
-         */
-        public static final String STATUS_BAR_DATE_STYLE = "status_bar_date_style";
-
-        /**
-         * Stores the java DateFormat string for the date
-         * @hide
-         */
-        public static final String STATUS_BAR_DATE_FORMAT = "status_bar_date_format";
-
-
-        /**
-         * Disable dashboard suggestions in settings
-         * @hide
-         */
-        public static final String DISABLE_SUGGESTIONS = "disable_dashboard_suggestions";
-
-        /**
-         * Remove tile summaries in settings
-         * @hide
-         */
-        public static final String REMOVE_TILE_SUMMARY = "remove_tile_summary";
-
-        /**
-         * Disable dashboard conditions in settings
-         * @hide
-         */
-        public static final String DISABLE_DASHBOARD_CONDITIONS = "disable_dashboard_conditions";
-
-        /**
-         * Dashboard portrait columns in settings
-         * @hide
-         */
-        public static final String DASHBOARD_PORTRAIT_COLUMNS = "dashboard_portrait_columns";
-
-        /**
-         * Dashboard landscape columns in settings
-         * @hide
-         */
-        public static final String DASHBOARD_LANDSCAPE_COLUMNS = "dashboard_landscape_columns";
-
-        /**
-         * Whether the proximity sensor will adjust call to speaker
-         * @hide
-         */
-        public static final String PROXIMITY_AUTO_SPEAKER = "proximity_auto_speaker";
-
-        /**
-         * Time delay to activate speaker after proximity sensor triggered
-         * @hide
-         */
-        public static final String PROXIMITY_AUTO_SPEAKER_DELAY = "proximity_auto_speaker_delay";
-
-        /**
-         * Whether the proximity sensor will adjust call to speaker,
-         * only while in call (not while ringing on outgoing call)
-         * @hide
-         */
-        public static final String PROXIMITY_AUTO_SPEAKER_INCALL_ONLY = "proximity_auto_speaker_incall_only";
-
-        /**
-         * Alternative recent apps integration using OmniSwitch
-         * @hide
-         */
-        public static final String RECENTS_USE_OMNISWITCH = "recents_use_omniswitch";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -6686,18 +6492,6 @@ public final class Settings {
                 "managed_profile_contact_remote_search";
 
         /**
-         * Whether to include options in power menu for rebooting into recovery or bootloader
-         * @hide
-         */
-        public static final String ADVANCED_REBOOT = "advanced_reboot";
-
-        /**
-         * Boolean value whether to link ringtone and notification volume
-         * @hide
-         */
-        public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
-
-        /**
          * Whether or not the automatic storage manager is enabled and should run on the device.
          *
          * @hide
@@ -6759,23 +6553,23 @@ public final class Settings {
                 = "demo_user_setup_complete";
 
         /**
-         * Whether to display the ADB notification.
-         * @hide
-         */
-        public static final String ADB_NOTIFY = "adb_notify";
-
-        /**
-         * Whether to use one tap tile action to enable or disable data 
-         * @hide
-         */
-        public static final String QS_DATA_ADVANCED = "qs_data_advanced";
-
-        /**
          * Specifies whether the web action API is enabled.
          *
          * @hide
          */
         public static final String WEB_ACTION_ENABLED = "web_action_enabled";
+
+        /**
+         * Whether to include options in power menu for rebooting into recovery or bootloader
+         * @hide
+         */
+        public static final String ADVANCED_REBOOT = "advanced_reboot";
+
+        /**
+         * Boolean value whether to link ringtone and notification volume
+         * @hide
+         */
+        public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
          * This are the settings to be backed up.
@@ -6851,7 +6645,6 @@ public final class Settings {
             TTY_MODE_ENABLED,
             INCALL_POWER_BUTTON_BEHAVIOR,
             WIFI_DISCONNECT_DELAY_DURATION,
-            ADVANCED_REBOOT,
             NIGHT_DISPLAY_CUSTOM_START_TIME,
             NIGHT_DISPLAY_CUSTOM_END_TIME,
             NIGHT_DISPLAY_AUTO_MODE,
@@ -6862,7 +6655,9 @@ public final class Settings {
             QS_TILES,
             DOZE_ENABLED,
             DOZE_PULSE_ON_PICK_UP,
-            DOZE_PULSE_ON_DOUBLE_TAP
+            DOZE_PULSE_ON_DOUBLE_TAP,
+            ADVANCED_REBOOT,
+            CAMERA_GESTURE_DISABLED
         };
 
         /**
@@ -8866,12 +8661,6 @@ public final class Settings {
          */
         @Deprecated
         public static final String SHOW_PROCESSES = "show_processes";
-
-          /**
-         * Control whether the process CPU info meter should be shown.
-         * @hide
-         */
-        public static final String SHOW_CPU = "show_cpu";
 
         /**
          * If 1 low power mode is enabled.
