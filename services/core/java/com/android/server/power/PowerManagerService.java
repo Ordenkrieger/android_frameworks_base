@@ -188,9 +188,6 @@ public final class PowerManagerService extends SystemService
     // Default setting for double tap to wake.
     private static final int DEFAULT_DOUBLE_TAP_TO_WAKE = 0;
 
-    // Default value for buttons lights timeout
-    private static final int BUTTON_ON_DURATION = 5000;
-
     /** Constants for {@link #shutdownOrRebootInternal} */
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({HALT_MODE_SHUTDOWN, HALT_MODE_REBOOT, HALT_MODE_REBOOT_SAFE_MODE})
@@ -460,7 +457,6 @@ public final class PowerManagerService extends SystemService
     // Button brightness setting limits.
     private int mButtonBrightnessSettingMinimum;
     private int mButtonBrightnessSettingMaximum;
-    private int mButtonBrightnessSettingDefault;
 
     // Override brightness value when off.
     private boolean mButtonBrightnessEnabled;
@@ -472,11 +468,6 @@ public final class PowerManagerService extends SystemService
     // to allow the current foreground activity to override the brightness.
     // Use -1 to disable.
     private int mScreenBrightnessOverrideFromWindowManager = -1;
-
-    // The button brightness setting override from the window manager
-    // to allow the current foreground activity to override the button brightness.
-    // Use -1 to disable.
-    private int mButtonBrightnessOverrideFromWindowManager = -1;
 
     // The window manager has determined the user to be inactive via other means.
     // Set this to false to disable.
@@ -2961,16 +2952,6 @@ public final class PowerManagerService extends SystemService
             mUserInactiveOverrideFromWindowManager = true;
             mDirty |= DIRTY_USER_ACTIVITY;
             updatePowerStateLocked();
-        }
-    }
-
-    private void setButtonBrightnessOverrideFromWindowManagerInternal(int brightness) {
-        synchronized (mLock) {
-            if (mButtonBrightnessOverrideFromWindowManager != brightness) {
-                mButtonBrightnessOverrideFromWindowManager = brightness;
-                mDirty |= DIRTY_SETTINGS;
-                updatePowerStateLocked();
-            }
         }
     }
 

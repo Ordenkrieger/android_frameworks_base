@@ -3916,15 +3916,20 @@ public final class Settings {
          */
         public static final String POCKET_JUDGE = "pocket_judge";
 
-        /**
-         * Value for button brightness.
-         * This is an integer value in a range between 0 and 255.
-         *      0 = off
-         *    255 = default
-         *    255 = max
-         * @hide
-         */
-        public static final String BUTTON_BRIGHTNESS = "button_brightness";
+                 /**
+          * IMPORTANT: If you add a new public settings you also have to add it to
+          * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
+          * it to PRIVATE_SETTINGS below. Also add a validator that can validate
+          * the setting value. See an example above.
+          */
+ 
+         /**
+          * Whether user can enable/disable navigation bar.
+          * <p>
+          * Type: int (0 for false, 1 for true)
+          * @hide
+          */
+         public static final String NAVIGATION_BAR_ENABLED = "navigation_bar_enabled";
 
         /**
          * Whether user can enable/disable button brightness.
