@@ -65,6 +65,7 @@ import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.notification.NotificationUtils;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
+import com.android.systemui.statusbar.policy.OnHeadsUpChangedListener;
 import com.android.systemui.statusbar.policy.WeatherController;
 import com.android.systemui.statusbar.policy.WeatherControllerImpl;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
@@ -82,7 +83,7 @@ public class NotificationPanelView extends PanelView implements
         ExpandableView.OnHeightChangedListener,
         View.OnClickListener, NotificationStackScrollLayout.OnOverscrollTopChangedListener,
         KeyguardAffordanceHelper.Callback, NotificationStackScrollLayout.OnEmptySpaceClickListener,
-        HeadsUpManager.OnHeadsUpChangedListener, WeatherController.Callback, TunerService.Tunable {
+        OnHeadsUpChangedListener, WeatherController.Callback, TunerService.Tunable {
 
     private static final boolean DEBUG = false;
 
@@ -2465,7 +2466,7 @@ public class NotificationPanelView extends PanelView implements
                 break;
             case STATUS_BAR_QUICK_QS_PULLDOWN:
                 mOneFingerQuickSettingsIntercept =
-                        newValue == null ? 0 : Integer.parseInt(newValue);
+                        newValue == null ? 1 : Integer.parseInt(newValue);
                 break;
             case LOCK_SCREEN_WEATHER_ENABLED:
                 final boolean wasKeyguardWeatherEnabled = mKeyguardWeatherEnabled;
