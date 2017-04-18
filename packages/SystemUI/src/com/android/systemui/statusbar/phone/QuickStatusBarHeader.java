@@ -61,7 +61,7 @@ import com.android.systemui.statusbar.policy.WeatherController;
 import com.android.systemui.tuner.TunerService;
 
 public class QuickStatusBarHeader extends BaseStatusBarHeader implements
-        NextAlarmChangeCallback, OnClickListener,OnLongClickListener; OnUserInfoChangedListener, EmergencyListener,
+        NextAlarmChangeCallback, OnClickListener,OnLongClickListener, OnUserInfoChangedListener, EmergencyListener,
         SignalCallback {
         
     private static final String TAG = "QuickStatusBarHeader";
