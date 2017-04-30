@@ -2257,5 +2257,8 @@ message MetricsEvent {
 
     // Nuclear
     NUCLEAR = 412;
+
+    // Location detail adapter
+    QS_LOCATION_DETAIL = 504;
   }
 }
