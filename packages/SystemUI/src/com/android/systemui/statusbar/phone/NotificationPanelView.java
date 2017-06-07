@@ -30,8 +30,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.PowerManager;
-import android.os.UserHandle;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.MathUtils;
 import android.view.GestureDetector;
@@ -77,6 +75,8 @@ import cyanogenmod.weather.util.WeatherUtils;
 
 import java.util.List;
 
+import cyanogenmod.providers.CMSettings;
+
 public class NotificationPanelView extends PanelView implements
         ExpandableView.OnHeightChangedListener,
         View.OnClickListener, NotificationStackScrollLayout.OnOverscrollTopChangedListener,
@@ -100,12 +100,8 @@ public class NotificationPanelView extends PanelView implements
             "cmsystem:" + CMSettings.System.STATUS_BAR_QUICK_QS_PULLDOWN;
     private static final String DOUBLE_TAP_SLEEP_GESTURE =
             "cmsystem:" + CMSettings.System.DOUBLE_TAP_SLEEP_GESTURE;
-    private static final String DOUBLE_TAP_SLEEP_ANYWHERE =
-            "cmsystem:" + CMSettings.System.DOUBLE_TAP_SLEEP_ANYWHERE;
     private static final String LOCK_SCREEN_WEATHER_ENABLED =
             "cmsecure:" + CMSettings.Secure.LOCK_SCREEN_WEATHER_ENABLED;
-    private static final String DOUBLE_TAP_SLEEP_ANYWHERE =
-            "cmsecure:" + CMSettings.Secure.DOUBLE_TAP_SLEEP_ANYWHERE;
 
     private static final Rect mDummyDirtyRect = new Rect(0, 0, 1, 1);
 
@@ -229,11 +225,9 @@ public class NotificationPanelView extends PanelView implements
     private NotificationGroupManager mGroupManager;
 
     private int mOneFingerQuickSettingsIntercept;
-    private boolean mDoubleTapToSleepAnywhere;
     private boolean mDoubleTapToSleepEnabled;
     private int mStatusBarHeaderHeight;
     private GestureDetector mDoubleTapGesture;
-    private boolean mDoubleTapToSleepAnywhere;
 
     private boolean mKeyguardWeatherEnabled;
     private TextView mKeyguardWeatherInfo;
@@ -400,7 +394,6 @@ public class NotificationPanelView extends PanelView implements
         TunerService.get(mContext).addTunable(this,
                 STATUS_BAR_QUICK_QS_PULLDOWN,
                 DOUBLE_TAP_SLEEP_GESTURE,
-                DOUBLE_TAP_SLEEP_ANYWHERE,
                 LOCK_SCREEN_WEATHER_ENABLED);
     }
 
@@ -805,9 +798,6 @@ public class NotificationPanelView extends PanelView implements
         if (mDoubleTapToSleepEnabled
                 && mStatusBarState == StatusBarState.KEYGUARD
                 && event.getY() < mStatusBarHeaderHeight) {
-            mDoubleTapGesture.onTouchEvent(event);
-        } else if (mDoubleTapToSleepAnywhere
-                && mStatusBarState == StatusBarState.KEYGUARD) {
             mDoubleTapGesture.onTouchEvent(event);
         }
         initDownStates(event);
@@ -2227,7 +2217,7 @@ public class NotificationPanelView extends PanelView implements
 
                 // This gets called in the middle of the touch handling, where the state is still
                 // that we are tracking the panel. Collapse the panel after this is done.
-                post(mEmptySpaceClickedRunnable);
+                post(mPostCollapseRunnable);
                 return false;
             default:
                 return true;
@@ -2462,12 +2452,9 @@ public class NotificationPanelView extends PanelView implements
             case DOUBLE_TAP_SLEEP_GESTURE:
                 mDoubleTapToSleepEnabled = newValue == null || Integer.parseInt(newValue) == 1;
                 break;
-            case DOUBLE_TAP_SLEEP_ANYWHERE:
-                mDoubleTapToSleepAnywhere = newValue == null || Integer.parseInt(newValue) == 1;
-                break;
             case STATUS_BAR_QUICK_QS_PULLDOWN:
                 mOneFingerQuickSettingsIntercept =
-                        newValue == null ? 1 : Integer.parseInt(newValue);
+                        newValue == null ? 0 : Integer.parseInt(newValue);
                 break;
             case LOCK_SCREEN_WEATHER_ENABLED:
                 final boolean wasKeyguardWeatherEnabled = mKeyguardWeatherEnabled;
@@ -2476,9 +2463,6 @@ public class NotificationPanelView extends PanelView implements
                         && wasKeyguardWeatherEnabled != mKeyguardWeatherEnabled) {
                     onWeatherChanged(mWeatherController.getWeatherInfo());
                 }
-                break;
-            case DOUBLE_TAP_SLEEP_ANYWHERE:
-                mDoubleTapToSleepAnywhere = newValue == null || Integer.parseInt(newValue) == 1;
                 break;
             default:
                 break;

@@ -861,11 +861,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         TunerService.get(mContext).addTunable(this,
                 SCREEN_BRIGHTNESS_MODE,
                 NAVBAR_LEFT_IN_LANDSCAPE,
-                LOCKSCREEN_MEDIA_METADATA);
+                LOCKSCREEN_MEDIA_METADATA,
                 STATUS_BAR_BRIGHTNESS_CONTROL);
         SettingsObserver observer = new SettingsObserver(mHandler);
         observer.observe();
-                STATUS_BAR_BRIGHTNESS_CONTROL,
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
                 mHotspotController, mUserInfoController, mBluetoothController,
