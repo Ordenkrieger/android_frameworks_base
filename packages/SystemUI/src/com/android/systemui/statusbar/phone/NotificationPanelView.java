@@ -30,6 +30,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.PowerManager;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.MathUtils;
 import android.view.GestureDetector;
@@ -98,8 +100,8 @@ public class NotificationPanelView extends PanelView implements
 
     private static final String STATUS_BAR_QUICK_QS_PULLDOWN =
             "cmsystem:" + CMSettings.System.STATUS_BAR_QUICK_QS_PULLDOWN;
-    private static final String DOUBLE_TAP_SLEEP_GESTURE =
-            "cmsystem:" + CMSettings.System.DOUBLE_TAP_SLEEP_GESTURE;
+    private static final String DOUBLE_TAP_SLEEP_ANYWHERE =
+            "cmsystem:" + CMSettings.System.DOUBLE_TAP_SLEEP_ANYWHERE;
     private static final String LOCK_SCREEN_WEATHER_ENABLED =
             "cmsecure:" + CMSettings.Secure.LOCK_SCREEN_WEATHER_ENABLED;
 
@@ -228,6 +230,7 @@ public class NotificationPanelView extends PanelView implements
     private boolean mDoubleTapToSleepEnabled;
     private int mStatusBarHeaderHeight;
     private GestureDetector mDoubleTapGesture;
+    private boolean mDoubleTapToSleepAnywhere;
 
     private boolean mKeyguardWeatherEnabled;
     private TextView mKeyguardWeatherInfo;
@@ -393,7 +396,7 @@ public class NotificationPanelView extends PanelView implements
         super.onAttachedToWindow();
         TunerService.get(mContext).addTunable(this,
                 STATUS_BAR_QUICK_QS_PULLDOWN,
-                DOUBLE_TAP_SLEEP_GESTURE,
+                DOUBLE_TAP_SLEEP_ANYWHERE,
                 LOCK_SCREEN_WEATHER_ENABLED);
     }
 
@@ -799,6 +802,9 @@ public class NotificationPanelView extends PanelView implements
                 && mStatusBarState == StatusBarState.KEYGUARD
                 && event.getY() < mStatusBarHeaderHeight) {
             mDoubleTapGesture.onTouchEvent(event);
+        } else if (mDoubleTapToSleepAnywhere
+                && mStatusBarState == StatusBarState.KEYGUARD) {
+           mDoubleTapGesture.onTouchEvent(event);
         }
         initDownStates(event);
         if (mListenForHeadsUp && !mHeadsUpTouchHelper.isTrackingHeadsUp()
@@ -2451,6 +2457,9 @@ public class NotificationPanelView extends PanelView implements
         switch (key) {
             case DOUBLE_TAP_SLEEP_GESTURE:
                 mDoubleTapToSleepEnabled = newValue == null || Integer.parseInt(newValue) == 1;
+                break;
+             case DOUBLE_TAP_SLEEP_ANYWHERE:
+                mDoubleTapToSleepAnywhere = newValue == null || Integer.parseInt(newValue) == 1;
                 break;
             case STATUS_BAR_QUICK_QS_PULLDOWN:
                 mOneFingerQuickSettingsIntercept =
