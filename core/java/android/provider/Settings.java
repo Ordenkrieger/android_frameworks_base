@@ -6927,12 +6927,6 @@ public final class Settings {
         public static final String FORCE_AUTHORIZE_SUBSTRATUM_PACKAGES = "force_authorize_substratum_packages";
 
         /**
-         * Whether to use one tap tile action to enable or disable data 
-         * @hide
-         */
-        public static final String QS_DATA_ADVANCED = "qs_data_advanced";
-
-        /**
          * Whether user is allowed to pull down quick settings on secure keyguard.
          * @hide
          */
@@ -7025,7 +7019,7 @@ public final class Settings {
             DOZE_PULSE_ON_DOUBLE_TAP,
             NFC_PAYMENT_DEFAULT_COMPONENT,
             ADVANCED_REBOOT,
-            CAMERA_GESTURE_DISABLED
+            CAMERA_GESTURE_DISABLED,
             QS_TILES,
             STATUS_BAR_LOCKED_ON_SECURE_KEYGUARD
         };
